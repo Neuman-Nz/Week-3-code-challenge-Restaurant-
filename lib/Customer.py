@@ -1,3 +1,5 @@
+from __init__ import CONN, CURSOR
+
 class Customer:
     all_customers = []
     
@@ -24,14 +26,14 @@ class Customer:
         self.reviews.append(review)
         restaurant.add_review(review)
         
-     def num_reviews(self):
+    def num_reviews(self):
         return len(self.reviews)
 
     @classmethod
     def all(cls):
         return cls.all_customers
     
-     @classmethod
+    @classmethod
     def find_by_name(cls, name):
         for customer in cls.all_customers:
             if customer.full_name() == name:
@@ -44,4 +46,15 @@ class Customer:
         for customer in cls.all_customers:
             if customer.given_name == name:
                 customers.append(customer)
-        return customers
+        return customer
+
+    @classmethod
+    def create_table(cls):
+        sql = """
+        CREATE TABLE IF NOT EXISTS customers(
+            id INTEGER PRIMARY KEY,
+            given_name TEXT,
+            family_name TEXT)
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
